@@ -1,0 +1,8 @@
+* { box-sizing: border-box; }
+body { margin: 0; font-family: Arial, sans-serif; background: #f7f7f8; color: #111; }
+main { max-width: 1200px; margin: 0 auto; padding: 24px; }
+input, textarea, button { font: inherit; }
+table { width: 100%; border-collapse: collapse; background: white; }
+th, td { border: 1px solid #ddd; padding: 8px; vertical-align: top; }
+th { background: #f1f1f1; }
+.small { font-size: 12px; color: #666; }
