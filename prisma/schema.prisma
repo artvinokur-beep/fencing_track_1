@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model PoolImport {
+  id             String        @id @default(cuid())
+  ftlPoolLink    String
+  rosterRaw      String
+  kValue         Float         @default(300)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  opponents      OpponentRaw[]
+}
+
+model OpponentRaw {
+  id               String         @id @default(cuid())
+  poolImportId     String
+  name             String
+  club             String?
+  rating           String?
+  birthYear        Int?
+  rowOrder         Int
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  poolImport       PoolImport     @relation(fields: [poolImportId], references: [id], onDelete: Cascade)
+  opponentLink     OpponentLink?
+
+  @@index([poolImportId, rowOrder])
+}
+
+model OpponentLink {
+  id                 String            @id @default(cuid())
+  opponentRawId      String            @unique
+  fencingTrackerId   String
+  fencingTrackerUrl  String
+  confirmedAt        DateTime          @default(now())
+  opponentRaw        OpponentRaw       @relation(fields: [opponentRawId], references: [id], onDelete: Cascade)
+}
+
+model StrengthSnapshot {
+  id                  String    @id @default(cuid())
+  fencingTrackerId    String
+  fetchedAt           DateTime  @default(now())
+  sourceUrl           String
+  poolStrength        Float?
+  deStrength          Float?
+  confidenceLow       Float?
+  confidenceHigh      Float?
+  rawPayload          String
+
+  @@index([fencingTrackerId, fetchedAt])
+}
